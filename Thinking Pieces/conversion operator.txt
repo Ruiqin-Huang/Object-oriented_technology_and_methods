@@ -1,0 +1,97 @@
+conversion operator
+
+上面提到，C++会将某类类型implicitly convert到其他类型。比如将int类型转换成entity类型。但是我们想将entity类型转换成int类型就不可以，比如下面的做法是错误的：
+
+entity e = 3;
+int i = e;  //error
+
+要想实现这样的转换，我们可以使用conversion operator
+conversion operator 用于将某一个type的object转化成为另一个type的objet
+
+例子：
+
+class example{
+private:
+	int val;
+public:
+	example(): val(0){}
+	example(int _val): val(_val){}
+	~example(){}
+};
+
+我们可以用如下几种方法来initialize一个example的object
+
+int main(){
+	// 1：call the constructor example()
+	example e;
+	
+    // 2: call the constructor example(int _val)
+	example e_1(1);
+	example e_2 = 2;  //这两种方法都implicitly将一个int转化成了example
+	example e_3(example(3));
+	example e_4 = example(4);
+	 
+	// 3: we can also use initializer list 
+	example e_5 {5};
+	example e_6 = {6}
+	 
+	return 0;
+}
+
+我们这样做就会报错：
+
+int main(){
+	// C++ can implicitly convert an int to an example 
+	example e = 1;
+	// but C++ cannot convert an example to an int
+	int a = e;
+	return 0;
+}
+
+error info:
+No viable conversion from 'example' to 'int'
+
+
+如果我们想要把example转化成int怎么办？这里就用到了conversion oeprator：
+
+class example{
+private:
+	int val;
+public:
+	example(): val(0){}
+	example(int _val): val(_val){}
+	operator int() { return val; }
+	~example(){}
+};
+
+int main(){
+	example e = 1;
+	int a = e; 
+}
+
+我们可以将**operator int() {return val;}**看做是对于 () 的overload。
+每当我们将example class传给一个int类型的变量的时候，operator int() {return val;} 都会被调用，它等同于如下：
+
+int a = (int)e;
+
+虽然等同，但是不可以用(int)来代替operator int()，compiler会报错
+
+
+这种conversion operator在函数传参的时候非常有用：
+假如我们有如下两个functions：
+
+void fun1(int i){}
+void func2(example e){}
+
+int main(){
+	example e = 1;
+	func1(1);
+	// 由于func1需要一个int类型，但是传入的是example类型，所以
+	// operator int()会自动被调用，将example转化为int
+	// 如果没有operator int()，那么这里会报错
+	func1(e);
+	
+	// C++会自动调用example(1)将1转化成为一个example类型
+	func2(1);
+	func2(e);
+}

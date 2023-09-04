@@ -1,0 +1,23 @@
+// 1.1 Please explain the member variable s;
+// s 是一个指向Singleton类的指针，属于静态数据成员，为所有Singleton类对象共享，它被初始化为 nullptr
+
+// 1.2 Please describe the meaning above the codes;
+// 将构造函数定义在类的私有部分，用户不能通过类名“Singleton xxx”的方式调用构造函数直接定义类对象
+// 该代码定义了一个只能存在唯一类对象的 Singleton 类。GetInstance() 函数通过检查 s 是否为空指针来检查是否已经创建了一个 Singleton 类的对象。如果s是空指针，则创建一个新实例并将其分配给 s，然后返回s（指向Singleton类的指针）。
+// 析构函数用于析构类对象时释放静态成员 s 所指向的内存。如果 s 不为 nullptr，则使用 delete 操作符释放内存，并打印"Realease the static s."。
+//Singleton *Singleton::s = nullptr;定义了静态成员变量 s 并将其初始化为 nullptr。
+//主函数定义了一个指向 Singleton 类的指针 ps。然后，调用 Singleton 类的静态成员函数 GetInstance() 来获取 Singleton 类的唯一对象的指针，并将其赋值给 ps。最后函数使用 cout 输出 ps 的值，ps是一个地址
+
+//  1.3 Correct errors you find if any.
+//最后s并没有被析构（没有正确输出"Realease the static s."），因为类中的析构函数~Singleton（）不是静态函数，应该定义静态析构函数
+static void releasesingleton()
+{
+    if (s != nullptr)
+    {
+        delete s;
+        s = nullptr;
+        cout << "Realease the static s." << endl;
+    }
+}
+并在int main()中对其显式调用，
+ Singleton::releasesingleton();才能正确将静态成员变量s进行释放

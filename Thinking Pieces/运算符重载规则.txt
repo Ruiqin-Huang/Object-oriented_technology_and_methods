@@ -1,0 +1,57 @@
+运算符重载的规则
+C++中不是任意运算符都可以重载，运算符重载规则：
+
+1，C++中不允许用户定义新的运算符，只能对已有的运算符进行重载，
+
+2，重载后的运算符的优先级、结合性也应该保持不变，也不能改变其操作个数和语 法结构。
+
+3，重载后的含义，与操作基本数据类型的运算含义应类似，如加法运算符“+”，重 载后也应完成数据的相加操作。
+
+4，有5个运算符不可重载：类关系运算符“：”、成员指针运算符“*”、作用域运算 符“::”、sizeof运算符、三目运算符“？：”
+
+5，运算符重载函数不能有默认参数，否则就改变了运算符操作数的个数，是错误的。
+
+6，运算符重载函数既可以作为类的成员函数，也可以作为类的友元函数（全局函数）。 
+
+作为全局函数时，一般都需要在类中将该函数声明为友元函数。因为该函数大部分情况下都需要使用类的private成员。作为类的成员函数时，二元运算符的参数只有一个， 一元运算符不需要参数（参数没有任何意义，只是为了区分是前置还是后置形式：带 一个整型参数为后置形式）。因为有个参数（左操作数）是隐含的（隐式访问this指针 所指向的当前对象）。作为全局函数时，二元操作符需要两个参数，一元操作符需要一 个参数，而且其中必须有一个参数是对象，好让编译器区分这是程序员自定义的运算符， 防止程序员修改用于内置类型的运算符的性质。
+
+
+
+
+针对第5点的具体例子
+
+class Complex {
+public:
+    Complex(double real, double imag) : real_(real), imag_(imag) {}
+    Complex operator+(const Complex& other) const {
+        return Complex(real_ + other.real_, imag_ + other.imag_);
+    }
+private:
+    double real_;
+    double imag_;
+};
+这样，我们就可以这样使用 + 运算符：
+
+Complex a(1, 2);
+Complex b(3, 4);
+Complex c = a + b;
+但是，如果我们给 operator+ 函数添加一个默认参数，比如这样：
+
+class Complex {
+public:
+    Complex(double real, double imag) : real_(real), imag_(imag) {}
+    Complex operator+(const Complex& other, double x = 0) const {
+        return Complex(real_ + other.real_ + x, imag_ + other.imag_);
+    }
+private:
+    double real_;
+    double imag_;
+};
+那么，当我们使用 + 运算符时，就会出现问题：
+
+Complex a(1, 2);
+Complex b(3, 4);
+Complex c = a + b; // 错误！
+这是因为 + 运算符本来应该接受两个操作数，但是由于我们给 operator+ 函数添加了一个默认参数，导致它现在可以接受三个操作数。这改变了 + 运算符的行为，是不允许的。
+
+所以说：对运算符的重载仅仅是重载其具体操作，对该运算符是单目还是双目等未改变，不能改变

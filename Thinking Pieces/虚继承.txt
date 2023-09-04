@@ -1,0 +1,40 @@
+虚继承（virtual inheritance）是 C++ 中一种特殊的继承方式，它用于解决多重继承中的菱形继承问题。当一个类从多个基类继承时，如果这些基类都继承自同一个类，
+那么就会出现菱形继承的情况。在这种情况下，派生类会包含多个基类的副本，这会导致数据冗余和二义性。
+
+为了解决这个问题，C++ 引入了虚继承。当一个类使用虚继承从另一个类继承时，它只会包含一个基类的副本，而不是多个。这样就避免了数据冗余和二义性的问题。
+
+在你给出的代码中，class B 和 class C 都使用虚继承从 class A 继承。这意味着如果有一个类同时从 class B 和 class C 继承，那么它只会包含一个 class A 的副本。
+
+好的，这里有一个虚继承的例子：
+
+#include <iostream>
+using namespace std;
+
+class A {
+public:
+    int x;
+};
+
+class B : virtual public A {
+public:
+    int y;
+};
+
+class C : virtual public A {
+public:
+    int z;
+};
+
+class D : public B, public C {
+public:
+    int w;
+};
+
+int main() {
+    D d;
+    d.x = 10; // 只有一个 A 类的副本，因此不会出现二义性
+    cout << d.x << endl;
+    return 0;
+}
+在这个例子中，class B 和 class C 都使用虚继承从 class A 继承。class D 从 class B 和 class C 继承。由于使用了虚继承
+，所以 class D 只包含一个 class A 的副本，因此在访问 d.x 时不会出现二义性。

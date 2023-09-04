@@ -1,0 +1,40 @@
+1. Create a program that opens a text file, JourneyToWest.txt .
+   1.1 Define a function to count the words in the file;
+   1.2 Question:  Who are the very important person in { 大圣76, 玉帝16, 王母娘娘3, 仙女23, 天王12 }?  Please give two names and tell WHY.
+
+
+2.  Create a program that define PressButton to call different function through pointer of function, and get the results as follow. 
+	void main()
+	{
+		PressButton(Show);
+		PressButton(Popmenu);
+	}
+
+Output:
+   Call Show function
+   Call Popmenu function
+
+
+
+3. Create a class CCircle, and finish the following functions as below:
+  2.1 Define two member variables, X and Y, as coordinate respectively, and the other member variable R is radius;
+  2.2 Define a member function, Relationship, to judge the relationship such as seperation, intersection between two circles. 
+  Note: You can define appropriate parameters according to your member functions.
+
+
+
+4. Creat a class CDate, and finish the following functions as below:
+  3.1 Define three member variables, Year, Month and Day;
+  3.2 Define a member function, Span, to get the number of days of two dates, such as : 
+        Date date1(2023, 2, 27), date2(2023, 3, 10);
+        int spanDays = date2.Span(date1);
+  3.3 You may define other members if you need.
+  Note: You can define appropriate parameters according to your member functions.
+
+
+
+[optional] 
+   Define an array of int. Take the starting address of that array and use static_cast to convert it into void*. 
+   Write a function that takes a void*, a number(indicating a number of bytes), and a value(indicating the value to which each byte should be set) as arguments. 
+   The function should set each byte in the specified range to the spcified value. Try out the function on your array of int.
+      
